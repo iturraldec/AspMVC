@@ -1,7 +1,10 @@
+using AspMVC.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<NorthwindContext>();
 
 var app = builder.Build();
 

@@ -1,7 +1,60 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<SelectListItem>
+
+@{
+    ViewData["Title"] = "Catalogos y Productos";
 }
 
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+tr:nth-child(even) {
+  background-color: #D6EEEE;
+}
+</style>
+
 <div class="text-center">
-    <h1 class="display-4">hola...mundo!</h1>
+    <div>
+      <p>Categorias de los productos:</p>
+      @Html.DropDownList("categories", Model, "Seleccione una categoria")
+      <button id="load" class="btn btn-primary">Cargar</button>
+    </div>
+    
+    <div>
+      <table style="width:100%">
+
+        <caption>Listado de Productos</caption>
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Unidad</th>
+            <th>Precio</th>
+          </tr>
+        </thead>
+        
+        <tbody id="tcontenido"></tbody>
+
+      </table>
+    </div>
+    
 </div>
+
+@section Scripts {
+<script>
+$(document).ready(function() {
+  $("#load").on("click", function(e) {
+    e.preventDefault();
+    fetch("Home/GetProductos?idCategoria="+$("#categories").val())
+      .then(r => r.json())
+      .then(data => {
+        $('#tcontenido').html("");
+        $.each(data, function(idx, opt) {
+          $('#tcontenido').append('<tr><td>' + opt.productId + '</td><td>' + opt.productName + '</td><td>' + opt.quantityPerUnit + '</td><td>' + opt.unitPrice + '</td></tr>');
+        });
+      });
+  })
+})
+</script>
+}
