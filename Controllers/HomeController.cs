@@ -30,4 +30,17 @@ public class HomeController : Controller
 
         return Ok(products);
     }
+    [HttpPost]
+    public IActionResult AddProduct([FromBody] ProductRequest productRequest)
+    {
+        var product  = new Product();
+
+        product.CategoryId = productRequest.CategoryId;
+        product.ProductName = productRequest.Name;
+        product.QuantityPerUnit = productRequest.Unit;
+        product.UnitPrice = productRequest.Price;
+        _context.Products.Add(product);
+        _context.SaveChanges();
+        return Ok(product);
+    }
 }
