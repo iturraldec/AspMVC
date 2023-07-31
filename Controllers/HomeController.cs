@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using AspMVC.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace AspMVC.Controllers;
 
@@ -13,7 +12,7 @@ public class HomeController : Controller
         _context = context;
     }
 
-    public IActionResult Index()
+    public ActionResult Index()
     {
         IEnumerable<SelectListItem> items = from value in _context.Categories.OrderBy(v => v.CategoryName).ToList()
                                             select new SelectListItem(value.CategoryName, value.CategoryId.ToString());
@@ -21,17 +20,17 @@ public class HomeController : Controller
         return View(items);
     }
 
-    public async Task<ActionResult> GetProductos(int? idCategoria)
+    public ActionResult GetProductos(int? idCategoria)
     {
-        var products = await _context.Products
+        var products = _context.Products
                                 .Where(p => p.CategoryId == idCategoria)
                                 .OrderBy(p => p.ProductName)
-                                .ToListAsync();
+                                .ToList();
 
         return Ok(products);
     }
     [HttpPost]
-    public IActionResult AddProduct([FromBody] ProductRequest productRequest)
+    public ActionResult AddProduct([FromBody] ProductRequest productRequest)
     {
         var product  = new Product();
 
